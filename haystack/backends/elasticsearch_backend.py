@@ -109,7 +109,7 @@ class ElasticsearchSearchBackend(BaseSearchBackend):
         if not 'INDEX_NAME' in connection_options:
             raise ImproperlyConfigured("You must specify a 'INDEX_NAME' in your settings for connection '%s'." % connection_alias)
 
-        self.conn = elasticsearch.Elasticsearch(connection_options['URL'], timeout=self.timeout, **connection_options.get('KWARGS', {}))
+        self.conn = elasticsearch.Elasticsearch(**connection_options.get('KWARGS', {}) if not connection_options['URL'] else connection_options['URL'])
         self.index_name = connection_options['INDEX_NAME']
         self.log = logging.getLogger('haystack')
         self.setup_complete = False
